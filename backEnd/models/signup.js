@@ -12,7 +12,12 @@ const SignUp =  sequelize.define('signup', {
      type:Sequelize.STRING,
      unique: true,
      allowNull: false
+    },
+    password:{
+        type:Sequelize.STRING,
+        allowNull:false
     }
+
 })
 
 module.exports = SignUp;

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <title>Day to day Expenses</title>
   </head>
   <body>
@@ -18,12 +18,12 @@
           <input id="email" type="email" required />
         </div>
         <div>
-          <label for="password">password</label>
+          <label for="password">Password</label>
           <input id="password" type="password" required />
         </div>
 
         <div>
-          <button id="Signup" type="submit" onclick="postSignUpdetails(event)">
+          <button id="Signup" type="submit" onclick="postSignUpDetails(event)">
             Signup
           </button>
         </div>
@@ -31,21 +31,33 @@
     </div>
 
     <script>
-      async function postSignUpdetails(event) {
+      async function postSignUpDetails(event) {
         event.preventDefault();
         const name = document.getElementById("name").value;
         const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
         const obj = {
-          name:name,
-          email:email
+          name: name,
+          email: email,
+          password: password,
         };
-        console.log(obj)
-        await axios.post("http://localhost:4000/user/signup", obj);
+        console.log(obj);
+
         try {
-          console.log("data successfully send to the server");
+          const response = await axios.post("http://localhost:4000/user/signup", obj);
+          if (response.status === 201) {
+            console.log("Data successfully sent to the server");
+            console.log("Signup successful, redirect to login page");
+          } else {
+            console.log("Error during signup, unable to redirect to login");
+          }
         } catch (err) {
-          console.log("error in sending data to server");
+          if (err.response && err.response.status === 400) {
+            alert("User already exists");
+          } else {
+            console.log("Error sending data:", err);
+          }
         }
       }
     </script>
