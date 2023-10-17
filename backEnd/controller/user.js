@@ -1,45 +1,46 @@
 const User = require("../models/user");
+const bcrypt = require('bcrypt');
 
 exports.postUser = async (req, res, next) => {
   try {
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password
+   const {name,email,password} = req.body;
     if (!name || !password || !email) {
       return res.status(400).json({ error: "Bad parameters. Something is missing." });
-    } else{ await User.create({
-      name: name,
-      email: email,
-      password: password,
-    });
-    res.status(201).json({ message: "Successfully created a new user." });}
-   
+    } 
+    bcrypt.hash(password,10, async (err,hash)=>{
+   await User.create({name,email,password: hash});
+        res.status(201).json({ message: "Successfully created a new user." });
+      })
   } catch (err) {
     res.status(500).send("Error posting the data to the database: " + err);
-  }
 };
+}
 exports.postLogin = async (req, res, next) => {
   try {
-    console.log(req.body)
     const email = req.body.email;
     const password = req.body.password;
-
     if (!email || !password) {
       return res.status(400).json({ error: "Bad parameters. Something is missing." });
     }
-
-    const user = await User.findOne({ where: { email: email, password: password } });
-
-    if (user) {
-      res.status(200).json({ message: "Login successful" });
-    } else {
-      res.status(401).json({ error: "Enter the correct details" });
+    const user = await User.findAll({ where: { email: email } });
+    if (user.length>0) {
+      bcrypt.compare(password,user[0].password,(err,result)=>{
+        if(err){
+          throw new Error("something is not right")
+        }
+        if(result===true){
+          res.status(200).json({ success:true, message: "Login successful" });
+        }
+        else{
+          return res.status(404).json({success:false, message: "password is incorrect" });
+        }
+      })
     }
-  } catch (err) {
-    res.status(500).json({ error: "Error logging in: " + err });
+    else{
+return res.status(404).json({success:false,message:'User does not exitst'})
+    }
+  }catch(err){
+
   }
-};
-
-
-
-// exports.postLogin = 
+}
+  
