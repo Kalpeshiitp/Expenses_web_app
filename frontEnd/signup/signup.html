@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <title>Day to day Expenses</title>
+  </head>
+  <body>
+    <div>
+      <h2>Signup</h2>
+      <form onsubmit="signup(event)">
+        <div>
+          <label for="name">Enter your name</label>
+          <input id="name" type="text" required />
+        </div>
+        <div>
+          <label for="email">Enter your email</label>
+          <input id="email" type="email" required />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input id="password" type="password" required />
+        </div>
+
+        <div>
+          <button type="submit">Signup</button>
+        </div>
+      </form>
+    </div>
+    <a href="../login/login.html">Existing User</a>
+
+    <script>
+      async function signup(event) {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const signupObj = {
+          name: name,
+          email: email,
+          password: password,
+        };
+        console.log(obj);
+
+        try {
+          const response = await axios.post(
+            "http://localhost:4000/user/signup",
+            signupObj
+          );
+          if (response.status === 201) {
+            window.location.href = "../login/login.html";
+          } else {
+            console.log("Error during signup, unable to redirect to login");
+          }
+        } catch (err) {
+          console.log("Error:", err);
+          if (err.response) {
+            console.log("Response Status:", err.response.status);
+            console.log("Response Data:", err.response.data);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
