@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container my-4">
+        <h1 class="display-4 text-center mb-4">Expense Tracker</h1>
+        <form onsubmit="expensesDetails(event)" class="mb-4 text-center">
+            <div class="mb-3 form-group">
+                <label for="money" class="form-label">Amount</label>
+                <input id="money" type="number" class="form-control" required />
+            </div>
+            <div class="mb-3 form-group">
+                <label for="description" class="form-label">Description</label>
+                <input id="description" type="text" class="form-control" required />
+            </div>
+            <div class="mb-3 form-group">
+                <label for="expenseType" class="form-label">Type</label>
+                <select id="expenseType" class="form-select">
+                    <option value="food">Food</option>
+                    <option value="electricity">Electricity</option>
+                    <option value="rent">Rent</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button type="submit"  class="btn btn-primary">Submit</button>
+        </form>
+        <ul id="expenseList" class="list-group"></ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script>
+      function expensesDetails(event) {
+        event.preventDefault();
+        const money = document.getElementById("money").value;
+        const description = document.getElementById("description").value;
+        const type = document.getElementById("expenseType").value;
+
+        const obj = {
+          money,
+          description,
+          type,
+        };
+
+        axios
+          .post("http://localhost:4000/expense/add-expense", obj)
+          .then((response) => {
+            showExpense(response.data.newExpenseDetail);
+            // showExpense(response.data);
+          })
+          .catch((err) => {
+            console.log(err);
+            document.body.innerHTML += "<h4>Something is wrong</h4>";
+          });
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        axios
+          .get("http://localhost:4000/expense/get-expense")
+          .then((response) => {
+        if (Array.isArray(response.data.allExpense) && response.data.allExpense.length > 0) {
+          for (var i = 0; i < response.data.allExpense.length; i++) {
+            showExpense(response.data.allExpense[i]);
+          }
+        } else {
+          console.log("No expenses found in the database.");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      });
+
+      function showExpense(expense) {
+        document.getElementById("money").value = "";
+        document.getElementById("description").value = "";
+
+        document.getElementById("expenseType").value = "";
+
+        const parentNode = document.getElementById("expenseList");
+        const childNode = document.createElement("li");
+        childNode.id = `expense-${expense.id}`;
+        childNode.innerHTML = `
+        ${expense.money} - ${expense.description} - ${expense.type} 
+        <button class="edit-button" data-expense-id="${expense.id}" onclick="editExpense('${expense.money}', '${expense.description}', '${expense.type}', '${expense.id}')">Edit</button>
+        <button class="delete-button" data-expense-id="${expense.id}" onclick="deleteExpense('${expense.id}')">Delete</button>
+    `;
+        parentNode.appendChild(childNode);
+      }
+
+      function editExpense(money, description, type, expenseId) {
+        axios
+          .put(`http://localhost:4000/expense/edit-expense/${expenseId}`)
+          .then((response) => {
+            const expense = response.data;
+            document.getElementById("money").value = expense.money;
+            document.getElementById("description").value = expense.description;
+            document.getElementById("expenseType").value = expense.type;
+            removeExpenseFromScreen(expenseId);
+          })
+          .catch((err) => {
+            console.log(err);
+            document.body.innerHTML +=
+              "<h4>Failed to fetch expense details</h4>";
+          });
+      }
+
+      function deleteExpense(expenseId) {
+        axios
+          .delete(`http://localhost:4000/expense/delete-expense/${expenseId}`)
+          .then(() => {
+            removeExpenseFromScreen(expenseId);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      function removeExpenseFromScreen(expenseId) {
+        const expenseToRemove = document.getElementById(`expense-${expenseId}`);
+        if (expenseToRemove) {
+          expenseToRemove.remove();
+        }
+      }
+    </script>
+  </body>
+</html>

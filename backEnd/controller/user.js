@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 exports.postUser = async (req, res, next) => {
   try {
    const {name,email,password} = req.body;
-    if (!name || !password || !email) {
+   const isValid = (value) => value !== null && value !== undefined && value !== '';
+    if (!isValid(name) || !isValid(password) || !isValid(email)) {
       return res.status(400).json({ error: "Bad parameters. Something is missing." });
     } 
     bcrypt.hash(password,10, async (err,hash)=>{
@@ -19,7 +20,8 @@ exports.postLogin = async (req, res, next) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    if (!email || !password) {
+    const isValid = (value) => value !== null && value !== undefined && value !== '';
+    if (!isValid(email) || !isValid(password)) {
       return res.status(400).json({ error: "Bad parameters. Something is missing." });
     }
     const user = await User.findAll({ where: { email: email } });
@@ -40,7 +42,7 @@ exports.postLogin = async (req, res, next) => {
 return res.status(404).json({success:false,message:'User does not exitst'})
     }
   }catch(err){
-
+    res.status(500).send("Error posting the data to the database: " + err);
   }
 }
   
