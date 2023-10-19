@@ -1,6 +1,12 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../util/database'); 
 const Expense = sequelize.define('Expense', {
+    id:{
+        type:DataTypes.INTEGER,
+        autoIncrement:true,
+        allowNull:false,
+        primaryKey:true
+    },
   money: {
     type: DataTypes.DOUBLE, 
     allowNull: false,

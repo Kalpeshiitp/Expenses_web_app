@@ -19,8 +19,16 @@ const User =  sequelize.define('user', {
     password:{
         type:Sequelize.STRING,
         allowNull:false
-    }
-
+    },
+    ispremiumuser: Sequelize.BOOLEAN
 })
+
+// User.sync({ force: true })
+//   .then(() => {
+//     console.log('user table created with force option.');
+//   })
+//   .catch((err) => {
+//     console.error('Error creating the user table:', err);
+//   });
 
 module.exports = User;

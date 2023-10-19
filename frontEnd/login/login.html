@@ -43,12 +43,12 @@
             "http://localhost:4000/user/login",
             loginObj
           );
-            if (response.status === 200) {
-              alert(response.data.message)
+            if(response.status===200){
+            alert(response.data.message)
             window.location.href = "../expense/expense.html";
-          } else {
-            console.log("Error during signup, unable to redirect to expense");
-          }
+            localStorage.setItem('token',response.data.token)
+            }
+          
         } catch (err) {
           if (err.response) {
             console.log("Response Status:", err.response.status);
