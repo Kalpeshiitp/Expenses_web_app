@@ -161,26 +161,31 @@ document.getElementById('rzp-button1').onclick = async function (e) {
 };
 
 
-function showLeaderBoard(){
-  const inputElement = document.createElement("input")
+function showLeaderBoard() {
+  const inputElement = document.createElement("input");
   inputElement.type = "button";
-  inputElement.value = "Show Leaderboaed"
-  inputElement.onclick = async ()=>{
+  inputElement.value = "Show Leaderboard";
+  inputElement.onclick = async () => {
     const token = localStorage.getItem('token');
-    const userleaderBoardArray = await axios.get('http://localhost:4000/premium/showleaderboard',{
+    const userleaderBoardArray = await axios.get('http://localhost:4000/premium/showleaderboard', {
       headers: { 'Authorization': token }
-    })
-    console.log("userleaderBoardArray>>>>",userleaderBoardArray)
+    });
+    console.log("userleaderBoardArray>>>>", userleaderBoardArray);
 
-    var leaderBoardElm = document.getElementById('leaderBoard')
+    var leaderBoardElm = document.getElementById('leaderBoard');
+    
+    // Clear the previous content
     leaderBoardElm.innerHTML = '';
-    leaderBoardElm.innerHTML += '<h1>Leader Board </h>'
-      userleaderBoardArray.data.forEach((userDetails)=>{
-        leaderBoardElm.innerHTML+=`<li>Name-${userDetails.name} Total Expense-${userDetails.total_cost}</li>`
-      })
-  }
-  document.getElementById("message").appendChild(inputElement)
+    
+    // Add the new content
+    leaderBoardElm.innerHTML += '<h1>Leader Board </h1>';
+    userleaderBoardArray.data.forEach((userDetails) => {
+      leaderBoardElm.innerHTML += `<li>Name-${userDetails.name} Total Expense-${userDetails.total_cost}</li>`;
+    });
+  };
+  document.getElementById("message").appendChild(inputElement);
 }
+
       function showExpense(expense) {
         document.getElementById("money").value = "";
         document.getElementById("description").value = "";
