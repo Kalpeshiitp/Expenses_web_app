@@ -1,23 +1,32 @@
 const Expense = require('../models/expense');
+const User = require("../models/user");
 
-exports.postExpense = async(req,res)=>{
-    try {
-    //   const money = req.body.money;
-    //   const description =req.body.description;
-    //   const type = req.body.type
-    const {money,description,type} = req.body;
-    if(money==undefined ||money.length===0){
-       return res.status(400).json({success:false, message:"parameter missing"})
+exports.postExpense = async (req, res) => {
+  try {
+    const { money, description, type } = req.body;
+    if (money === undefined || money.length === 0) {
+      return res.status(400).json({ success: false, message: "Parameter missing" });
     }
-      const data = await Expense.create({money: money, description: description,type: type,userId:req.user.id});
-      res.status(201).json({ newExpenseDetail: data });
-    } catch (err) {
-        console.log(err)
-      res.status(500).json({
-        error: err.message,
-      });
-    }
+    const data = await Expense.create({ money: money, description: description, type: type, userId: req.user.id });
+
+    // Calculate the new totalExpense
+    const newExpense = Number(money);
+    const updatedTotalExpense = Number(req.user.totalExpense) + newExpense;
+
+    // Update the user's totalExpense in the database
+    await User.update({ totalExpense: updatedTotalExpense }, {
+      where: { id: req.user.id }
+    });
+
+    res.status(201).json({ newExpenseDetail: data });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: err.message,
+    });
   }
+}
+
 
   exports.getExpense= async (req, res) => {
     try {
@@ -64,3 +73,4 @@ if (!expense) {
    }
 
   }
+

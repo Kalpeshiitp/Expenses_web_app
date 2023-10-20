@@ -180,7 +180,7 @@ function showLeaderBoard() {
     // Add the new content
     leaderBoardElm.innerHTML += '<h1>Leader Board </h1>';
     userleaderBoardArray.data.forEach((userDetails) => {
-      leaderBoardElm.innerHTML += `<li>Name-${userDetails.name} Total Expense-${userDetails.total_cost}</li>`;
+      leaderBoardElm.innerHTML += `<li>Name-${userDetails.name} Total Expense-${userDetails.totalExpense}</li>`;
     });
   };
   document.getElementById("message").appendChild(inputElement);

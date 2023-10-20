@@ -20,15 +20,11 @@ const User =  sequelize.define('user', {
         type:Sequelize.STRING,
         allowNull:false
     },
-    ispremiumuser: Sequelize.BOOLEAN
+    ispremiumuser: Sequelize.BOOLEAN,
+    totalExpense: {
+        type: Sequelize.FLOAT, // Adjust the data type as needed
+        defaultValue: 0 // Default value for the column
+    }
 })
-
-// User.sync({ force: true })
-//   .then(() => {
-//     console.log('user table created with force option.');
-//   })
-//   .catch((err) => {
-//     console.error('Error creating the user table:', err);
-//   });
 
 module.exports = User;
