@@ -32,7 +32,6 @@ rzp.orders.create({amount,currency:"INR"},(err,order)=>{
     }
 }
 
-
 exports.updateTransactionStatus = async (req, res) => {
     try {
       const userId = req.user.id;
@@ -53,8 +52,6 @@ exports.updateTransactionStatus = async (req, res) => {
       return res.status(500).json({ error: err.message, message: 'Something went wrong' });
     }
   };
-
-
 
 
 exports.premiumStatus = async (req, res) => {

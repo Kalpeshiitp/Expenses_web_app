@@ -1,0 +1,200 @@
+function expensesDetails(event) {
+    event.preventDefault();
+    const money = document.getElementById("money").value;
+    const description = document.getElementById("description").value;
+    const type = document.getElementById("expenseType").value;
+
+    const obj = {
+      money,
+      description,
+      type,
+    };
+    const token = localStorage.getItem('token')
+    axios
+      .post("http://localhost:4000/expense/add-expense", obj,{headers : {'Authorization':token}})
+      .then((response) => {
+        showExpense(response.data.newExpenseDetail);
+        // showExpense(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        document.body.innerHTML += "<h4>Something is wrong</h4>";
+      });
+  }
+
+
+
+function showPremiumUserMessage(){
+document.getElementById('rzp-button1').style.visibility = "hidden";
+document.getElementById('message').innerHTML="You are a premium user"
+}
+
+function parseJwt(token) {
+if (!token) {
+return null;
+}
+var base64Url = token.split('.')[1];
+var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+var jsonPayload = decodeURIComponent(
+window.atob(base64)
+  .split('')
+  .map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  })
+  .join('')
+);
+
+return JSON.parse(jsonPayload);
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+const token = localStorage.getItem('token');
+console.log(token)
+const decodeToken = parseJwt(token);
+console.log(decodeToken);
+const ispremiumuser = decodeToken.ispremiumuser;
+
+if (ispremiumuser) {
+  showPremiumUserMessage();
+  showLeaderBoard()
+}
+
+axios.get("http://localhost:4000/expense/get-expense", {
+  headers: { 'Authorization': token }
+})
+.then((response) => {
+  if (Array.isArray(response.data.allExpense) && response.data.allExpense.length > 0) {
+    for (let i = 0; i < response.data.allExpense.length; i++) {
+      showExpense(response.data.allExpense[i]);
+    }
+  } else {
+    console.log("No expenses found in the database.");
+  }
+})
+.catch((err) => {
+  console.log(err);
+});
+});
+
+
+
+document.getElementById('rzp-button1').onclick = async function (e) {
+const token = localStorage.getItem('token');
+
+const response = await axios.get('http://localhost:4000/purchase/premiummembership', {
+headers: { 'Authorization': token }
+});
+
+const options = {
+key: response.data.key_id,
+order_id: response.data.order.id,
+handler: async function (response) {
+  try {
+    const res= await axios.post('http://localhost:4000/purchase/updatetransactionstatus', {
+      order_id: response.razorpay_order_id, 
+      payment_id: response.razorpay_payment_id
+    }, {
+      headers: { 'Authorization': token }
+    });
+    console.log(res);
+    alert('You are a Premium User Now');
+    showPremiumUserMessage();
+     localStorage.setItem('token', res.data.token)
+     showLeaderBoard()
+  } catch (error) {
+    console.error(error);
+    alert('Transaction status update failed');
+  }
+}
+};
+
+const rzp1 = new Razorpay(options);
+rzp1.open();
+e.preventDefault();
+
+rzp1.on('payment.failed', function (response) {
+console.log(response);
+alert('Something went wrong');
+});
+};
+
+
+function showLeaderBoard() {
+const inputElement = document.createElement("input");
+inputElement.type = "button";
+inputElement.value = "Show Leaderboard";
+inputElement.onclick = async () => {
+const token = localStorage.getItem('token');
+const userleaderBoardArray = await axios.get('http://localhost:4000/premium/showleaderboard', {
+  headers: { 'Authorization': token }
+});
+console.log("userleaderBoardArray>>>>", userleaderBoardArray);
+
+var leaderBoardElm = document.getElementById('leaderBoard');
+
+// Clear the previous content
+leaderBoardElm.innerHTML = '';
+
+// Add the new content
+leaderBoardElm.innerHTML += '<h1>Leader Board </h1>';
+userleaderBoardArray.data.forEach((userDetails) => {
+  leaderBoardElm.innerHTML += `<li>Name-${userDetails.name} Total Expense-${userDetails.totalExpense}</li>`;
+});
+};
+document.getElementById("message").appendChild(inputElement);
+}
+
+  function showExpense(expense) {
+    document.getElementById("money").value = "";
+    document.getElementById("description").value = "";
+
+    document.getElementById("expenseType").value = "";
+
+    const parentNode = document.getElementById("expenseList");
+    const childNode = document.createElement("li");
+    childNode.id = `expense-${expense.id}`;
+    childNode.innerHTML = `
+    ${expense.money} - ${expense.description} - ${expense.type} 
+    <button class="edit-button" data-expense-id="${expense.id}" onclick="editExpense('${expense.money}', '${expense.description}', '${expense.type}', '${expense.id}')">Edit</button>
+    <button class="delete-button" data-expense-id="${expense.id}" onclick="deleteExpense('${expense.id}')">Delete</button>
+`;
+    parentNode.appendChild(childNode);
+  }
+
+  function editExpense(money, description, type, expenseId) {
+
+    const token = localStorage.getItem('token')
+    axios
+      .put(`http://localhost:4000/expense/edit-expense/${expenseId}`,null,{headers:{'Authorization':token}})
+      .then((response) => {
+        const expense = response.data;
+        document.getElementById("money").value = expense.money;
+        document.getElementById("description").value = expense.description;
+        document.getElementById("expenseType").value = expense.type;
+        removeExpenseFromScreen(expenseId);
+      })
+      .catch((err) => {
+        console.log(err);
+        document.body.innerHTML +=
+          "<h4>Failed to fetch expense details</h4>";
+      });
+  }
+
+  function deleteExpense(expenseId) {
+    const token = localStorage.getItem('token')
+    axios
+      .delete(`http://localhost:4000/expense/delete-expense/${expenseId}`,{headers : {'Authorization':token}})
+      .then(() => {
+        removeExpenseFromScreen(expenseId);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function removeExpenseFromScreen(expenseId) {
+    const expenseToRemove = document.getElementById(`expense-${expenseId}`);
+    if (expenseToRemove) {
+      expenseToRemove.remove();
+    }
+  }

@@ -10,7 +10,7 @@
   <body>
     <div>
       <h2>Login</h2>
-      <form onsubmit="login(event)">
+      <form  id="loginForm" onsubmit="login(event)">
         <div>
           <label for="email">Enter your email</label>
           <input id="email" type="email" required />
@@ -24,37 +24,11 @@
           <button>Login</button>
         </div>
       </form>
+      <button id="forget" onclick="forgetPassword()">Forgot password</button>
     </div>
     <p id="responseMessage"></p>
     <a href="../signup/signup.html">New User -- Sign Up</a>
 
-    <script>
-      async function login(event) {
-      try {  event.preventDefault();
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        const loginObj = {
-          email: email,
-          password: password,
-        };
-
-          const response = await axios.post(
-            "http://localhost:4000/user/login",
-            loginObj
-          );
-            if(response.status===200){
-            alert(response.data.message)
-            window.location.href = "../expense/expense.html";
-            localStorage.setItem('token',response.data.token)
-            }
-          
-        } catch (err) {
-          if (err.response) {
-            console.log("Response Status:", err.response.status);
-          }
-        }
-      }
-    </script>
+    <script src="./login.js"></script>
   </body>
 </html>

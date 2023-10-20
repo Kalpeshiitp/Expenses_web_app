@@ -7,6 +7,4 @@ router.post('/user/signup',userController.postUser)
 
 router.post('/user/login',userController.postLogin)
 
-
-
 module.exports = router
