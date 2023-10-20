@@ -6,6 +6,7 @@ const User = require('./models/user');
 const userRouter = require('./routes/user')
 const expenseRouter = require("./routes/expense")
 const purchaseRouter = require("./routes/purchase")
+const premiumRouter = require('./routes/premiumFeature')
 
 const cors = require('cors');
 const path = require('path');
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(jsonParser,userRouter);
 app.use(jsonParser,expenseRouter )
 app.use(jsonParser, purchaseRouter);
+app.use(jsonParser,premiumRouter)
 
 User.hasMany(Expense);
 Expense.belongsTo(User)
