@@ -5,8 +5,6 @@ const User = require('../models/user');
 const userController = require('../controller/user')
 
 
-
-
 exports.purchasePremium = async(req,res)=>{
     try{
 var rzp = new Razorpay({

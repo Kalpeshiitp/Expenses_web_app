@@ -19,6 +19,8 @@ const expenseRouter = require("./routes/expense")
 const purchaseRouter = require("./routes/purchase")
 const premiumRouter = require('./routes/premiumFeature')
 const resetPasswordRoutes = require('./routes/resetPassword')
+// const forgetPasswordRoutes =  require('./routes/forgetpassword')
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -26,7 +28,8 @@ app.use(jsonParser,userRouter);
 app.use(jsonParser,expenseRouter )
 app.use(jsonParser, purchaseRouter);
 app.use(jsonParser,premiumRouter)
-app.use('/password', resetPasswordRoutes);
+// app.use(jsonParser,forgetPasswordRoutes)
+app.use(jsonParser, resetPasswordRoutes);
 
 
 User.hasMany(Expense);
