@@ -38,7 +38,9 @@ exports.postExpense = async (req, res) => {
   exports.getExpense= async (req, res) => {
     try {
       const expenses = await Expense.findAll({where:{userId:req.user.id}});
-      res.status(200).json({ allExpense: expenses });
+      const user = await User.findOne({where:{id:req.user.id}})
+      const expenseSum = user.totalExpense;
+      res.status(200).json({ allExpense: {expenses, expenseSum} });
     } catch (err) {
         console.log(err)
       res.status(500).json({ error: err.message });

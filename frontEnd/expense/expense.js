@@ -22,8 +22,6 @@ function expensesDetails(event) {
       });
   }
 
-
-
 function showPremiumUserMessage(){
 document.getElementById('rzp-button1').style.visibility = "hidden";
 document.getElementById('message').innerHTML="You are a premium user"
@@ -57,15 +55,16 @@ const ispremiumuser = decodeToken.ispremiumuser;
 if (ispremiumuser) {
   showPremiumUserMessage();
   showLeaderBoard()
+  expenseTable()
 }
 
 axios.get("http://localhost:4000/expense/get-expense", {
   headers: { 'Authorization': token }
 })
 .then((response) => {
-  if (Array.isArray(response.data.allExpense) && response.data.allExpense.length > 0) {
-    for (let i = 0; i < response.data.allExpense.length; i++) {
-      showExpense(response.data.allExpense[i]);
+  if (Array.isArray(response.data.allExpense.expenses) && response.data.allExpense.expenses.length > 0) {
+    for (let i = 0; i < response.data.allExpense.expenses.length; i++) {
+      showExpense(response.data.allExpense.expenses[i]);
     }
   } else {
     console.log("No expenses found in the database.");
@@ -75,8 +74,6 @@ axios.get("http://localhost:4000/expense/get-expense", {
   console.log(err);
 });
 });
-
-
 
 document.getElementById('rzp-button1').onclick = async function (e) {
 const token = localStorage.getItem('token');
@@ -144,6 +141,18 @@ userleaderBoardArray.data.forEach((userDetails) => {
 document.getElementById("message").appendChild(inputElement);
 }
 
+//expense table and for premium user
+async function expenseTable(){
+  const inputElement = document.createElement("input");
+  inputElement.type = "button";
+  inputElement.value = "Show Expense Table";
+  inputElement.onclick = async () => {
+    window.location.href = "../expenseTable/table.html";
+}
+document.getElementById("message").appendChild(inputElement);
+
+}
+
   function showExpense(expense) {
     document.getElementById("money").value = "";
     document.getElementById("description").value = "";
@@ -160,6 +169,25 @@ document.getElementById("message").appendChild(inputElement);
 `;
     parentNode.appendChild(childNode);
   }
+
+  //download
+  function download(){
+    axios.get('http://localhost:4000/user/download', { headers: {"Authorization" : token} })
+    .then((response) => {
+        if(response.status === 201){
+            var a = document.createElement("a");
+            a.href = response.data.fileUrl;
+            a.download = 'myexpense.csv';
+            a.click();
+        } else {
+            throw new Error(response.data.message)
+        }
+
+    })
+    .catch((err) => {
+        showError(err)
+    });
+}
 
   function editExpense(money, description, type, expenseId) {
 
