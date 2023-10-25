@@ -13,9 +13,8 @@ async function forgotpassword(event) {
 
     if (response.status === 200) {
       document.body.innerHTML +=
-        '<div style="color:green;">Mail Successfully sent</div>';
+     '<div style="color:green;">Mail Successfully sent</div>';
       localStorage.setItem("token", response.data.token);
-      alert("Shortly, you will receive an email to reset your password.");
     } else {
       throw new Error("Something went wrong!!!");
     }

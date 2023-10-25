@@ -4,18 +4,20 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const Forgotpassword = require("../models/forgotpassword");
 
+
 // Forgot Password Request
 const forgotpassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ where: { email } });
+    // const t = await sequelize.transaction()
 
     if (!user) {
       return res.status(404).json({ error: "User not found", success: false });
     }
 
     const existingForgotPasswordToken = await Forgotpassword.findOne({
-      where: { userId: user.id, active: true },
+      where: {userId: user.id, active: true},
     });
 
     if (existingForgotPasswordToken) {
@@ -39,13 +41,13 @@ const forgotpassword = async (req, res) => {
       host: "smtp.ethereal.email",
       port: 587,
       auth: {
-        user: "neva.kreiger60@ethereal.email",
-        pass: "8FJ6ZgKJCyag2293WG",
+        user: 'lynn.spencer@ethereal.email',
+        pass: 'P94fuXCvJqB9uwG1E2'
       },
     });
 
     const mailOptions = {
-      from: "neva.kreiger60@ethereal.email",
+      from: "lynn.spencer@ethereal.email",
       to: email,
       subject: "Password Reset",
       text: "Click the link to reset your password",
@@ -61,7 +63,6 @@ const forgotpassword = async (req, res) => {
         }
       });
     });
-
     return res
       .status(200)
       .json({ message: "Link to reset password sent to your email", success: true });
@@ -113,46 +114,59 @@ const resetpassword = async (req, res) => {
   }
 };
 
-// Update Password
 const updatepassword = async (req, res) => {
-  try {
-    const { newpassword } = req.query;
-    const resetpasswordid = req.params.id;
-
-    const resetPasswordRequest = await Forgotpassword.findOne({
-      where: { id: resetpasswordid, active: true },
-    });
-
-    if (!resetPasswordRequest) {
+    try {
+      const { newpassword } = req.query;
+      const { resetpasswordid } = req.params; // Make sure 'resetpasswordid' is in the URL
+  
+      console.log("Received new password:", newpassword);
+      console.log("Received reset password ID:", resetpasswordid);
+  
+      // Check if the reset password token is valid and active
+      const resetPasswordRequest = await Forgotpassword.findOne({
+        where: { id: resetpasswordid },
+      });
+  
+      console.log("Reset Password Request:", resetPasswordRequest);
+  
+      if (!resetPasswordRequest) {
+        console.log("Invalid or expired reset password token");
+        return res
+          .status(400)
+          .json({ error: "Invalid or expired reset password token", success: false });
+      }
+  
+      // Find the user associated with the reset password request
+      const user = await User.findOne({ where: { id: resetPasswordRequest.userId } });
+  
+      console.log("User Found:", user);
+  
+      if (!user) {
+        console.log("User not found");
+        return res.status(404).json({ error: "User not found, success: false" });
+      }
+  
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hash = await bcrypt.hash(newpassword, salt);
+  
+      // Update the user's password
+      await user.update({ password: hash });
+  
+      console.log("Password successfully updated");
+  
       return res
-        .status(400)
-        .json({ error: "Invalid or expired reset password token", success: false });
+        .status(201)
+        .json({ message: "Password successfully updated", success: true });
+    } catch (error) {
+      console.error("Error in password update:", error);
+      return res
+        .status(403)
+        .json({ error: "Password update failed", success: false });
     }
-
-    const user = await User.findOne({ where: { id: resetPasswordRequest.userId } });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found", success: false });
-    }
-
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(newpassword, salt);
-
-    // Update the user's password
-    await user.update({ password: hash });
-
-    return res
-      .status(201)
-      .json({ message: "Password successfully updated", success: true });
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(403)
-      .json({ error: "Password update failed", success: false });
-  }
-};
-
+  };
+  
+  
 module.exports = {
   forgotpassword,
   resetpassword,
