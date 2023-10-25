@@ -31,6 +31,9 @@ function showPremiumUserMessage() {
 function showDownloadButton() {
   const button = document.getElementById("downloadexpense");
   button.style.display = "block";
+function showPremiumUserMessage(){
+document.getElementById('rzp-button1').style.visibility = "hidden";
+document.getElementById('message').innerHTML="You are a premium user"
 }
 
 function parseJwt(token) {
