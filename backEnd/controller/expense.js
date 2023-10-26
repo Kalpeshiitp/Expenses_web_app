@@ -94,41 +94,39 @@ const postExpense = async (req, res) => {
 };
 
 
-
 const getExpense = async (req, res) => {
-  const ITEMS_PER_PAGE = 5;
   try {
     const page = +req.query.page || 1;
-    console.log("page>>>>",page)
+    const itemsPerPage = +req.query.itemsPerPage || 5; 
+    console.log("itemPerPage>>>>",itemsPerPage);
+    const offset = (page - 1) * itemsPerPage;
 
     const total = await Expense.count({ where: { userId: req.user.id } });
-    console.log("total expense itme >>>>",total)
-    const totalItem = total;
-
     const expenses = await Expense.findAll({
-      offset: (page - 1) * ITEMS_PER_PAGE,
-      limit: ITEMS_PER_PAGE,
+      where: { userId: req.user.id },
+      offset,
+      limit: itemsPerPage,
     });
- console.log("expenses>>>>",expenses)
+
     const user = await User.findOne({ where: { id: req.user.id } });
     const expenseSum = user.totalExpense;
-    console.log("expensSum>>",expenseSum);
-    
+
     res.status(200).json({
-      expenses:expenses,
-      expenseSum:expenseSum,
+      expenses,
+      expenseSum,
       currentPage: page,
-      hasNextPage: ITEMS_PER_PAGE * page < totalItem,
+      hasNextPage: offset + itemsPerPage < total,
       nextPage: page + 1,
       hasPreviousPage: page > 1,
       previousPage: page - 1,
-      lastPage: Math.ceil(totalItem / ITEMS_PER_PAGE),
+      lastPage: Math.ceil(total / itemsPerPage),
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 // const getExpense = async (req, res) => {

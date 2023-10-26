@@ -71,7 +71,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const page =1;
 
   const response =  await axios
-     .get(`http://localhost:4000/expense/get-expense?page=${page}`,{
+     .get(`http://localhost:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,{
      headers: { Authorization: token },
  })
  console.log("get response>>>>", response )
@@ -143,7 +143,6 @@ function showLeaderBoard() {
 
     var leaderBoardElm = document.getElementById("leaderBoard");
 
-    // Clear the previous content
     leaderBoardElm.innerHTML = "";
 
     // Add the new content
@@ -208,6 +207,16 @@ function download() {
     });
 }
 
+
+let itemsPerPage = 5; // Default items per page
+let currentPage = 1;
+
+const itemsPerPageSelect = document.getElementById("itemsPerPage");
+itemsPerPageSelect.addEventListener("change", () => {
+  itemsPerPage = parseInt(itemsPerPageSelect.value, 10);
+  currentPage = 1; // Reset to the first page when changing items per page
+  getExpense(currentPage);
+});
 function showpagination({
   currentPage,
   hasNextPage,
@@ -250,7 +259,7 @@ async function getExpense(page){
   const token = localStorage.getItem('token')
   try{
     const response =  await axios
-       .get(`http://localhost:4000/expense/get-expense?page=${page}`,{
+       .get(`http://localhost:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,{
        headers: { Authorization: token },
    })
    console.log("get response>>>>", response )
@@ -260,7 +269,6 @@ async function getExpense(page){
     console.log(err)
   }
 }
-
 
 function editExpense(money, description, type, expenseId) {
   const token = localStorage.getItem("token");

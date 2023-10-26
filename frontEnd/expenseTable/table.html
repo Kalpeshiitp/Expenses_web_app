@@ -8,11 +8,20 @@
     <title>Expense Table</title>
   </head>
   <body>
-   <div>
+  
     <h2>Expense Table</h2>
     <div id="expenseTableContainer"></div>
+    <label for="itemsPerPage">Items per page:</label>
+    <select id="itemsPerPage">
+      <option value="5">5</option>
+      <option value="10">10 </option>
+      <option value="20">20 </option>
+      <option value="30">30 </option>
+      <!-- Add more options as needed -->
+    </select>
     <ul id="pagination"></ul>
-   </div>
+  
+  
 
     <script src="./table.js"></script>
   </body>

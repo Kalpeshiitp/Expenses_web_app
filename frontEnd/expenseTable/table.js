@@ -2,7 +2,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const page =1;
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:4000/expense/get-expense?page=${page}`, {
+      const response = await axios.get(`http://localhost:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`, {
         headers: { 'Authorization': token }
       });
       console.log(response)
@@ -82,6 +82,17 @@ function showExpenseTable(expenseData,totalExpense){
       existingContent.appendChild(table);
 }
 
+
+let itemsPerPage = 5; 
+let currentPage = 1;
+
+const itemsPerPageSelect = document.getElementById("itemsPerPage");
+itemsPerPageSelect.addEventListener("change", () => {
+  itemsPerPage = parseInt(itemsPerPageSelect.value, 10);
+  currentPage = 1; 
+  getExpenseTable(currentPage);
+});
+
 function showTablepagintion({
   currentPage,
   hasNextPage,
@@ -123,7 +134,7 @@ async function getExpenseTable(page){
   const token = localStorage.getItem('token')
   try{
     const response =  await axios
-       .get(`http://localhost:4000/expense/get-expense?page=${page}`,{
+       .get(`http://localhost:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,{
        headers: { Authorization: token },
    })
    showExpenseTable(response.data.expenses, response.data.expenseSum)
