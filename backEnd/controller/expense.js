@@ -93,17 +93,55 @@ const postExpense = async (req, res) => {
   }
 };
 
+
+
 const getExpense = async (req, res) => {
+  const ITEMS_PER_PAGE = 5;
   try {
-    const expenses = await Expense.findAll({ where: { userId: req.user.id } });
+    const page = +req.query.page || 1;
+    console.log("page>>>>",page)
+
+    const total = await Expense.count({ where: { userId: req.user.id } });
+    console.log("total expense itme >>>>",total)
+    const totalItem = total;
+
+    const expenses = await Expense.findAll({
+      offset: (page - 1) * ITEMS_PER_PAGE,
+      limit: ITEMS_PER_PAGE,
+    });
+ console.log("expenses>>>>",expenses)
     const user = await User.findOne({ where: { id: req.user.id } });
     const expenseSum = user.totalExpense;
-    res.status(200).json({ allExpense: { expenses, expenseSum } });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: err.message });
+    console.log("expensSum>>",expenseSum);
+    
+    res.status(200).json({
+      expenses:expenses,
+      expenseSum:expenseSum,
+      currentPage: page,
+      hasNextPage: ITEMS_PER_PAGE * page < totalItem,
+      nextPage: page + 1,
+      hasPreviousPage: page > 1,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalItem / ITEMS_PER_PAGE),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+// const getExpense = async (req, res) => {
+//   try {
+//     const expenses = await Expense.findAll({ where: { userId: req.user.id } });
+//     const user = await User.findOne({ where: { id: req.user.id } });
+//     const expenseSum = user.totalExpense;
+//     res.status(200).json({ allExpense: { expenses, expenseSum } });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 const deleteExpense = async (req, res) => {
   const t = await sequelize.transaction();
