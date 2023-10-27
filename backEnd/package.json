@@ -11,6 +11,7 @@
   "author": "Kalpesh Kumar",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.437.0",
     "@sendgrid/mail": "^7.7.0",
     "aws-sdk": "^2.1478.0",
     "bcrypt": "^5.1.1",

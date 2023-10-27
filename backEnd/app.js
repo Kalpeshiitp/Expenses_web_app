@@ -37,11 +37,6 @@ Order.belongsTo(User);
 User.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(User);
 
-sequelize
-  .sync()
-  .then(() => {
-    app.listen(4000);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+app.listen(process.env.PORT || 4000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 4000}`);
+});

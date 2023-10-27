@@ -1,10 +1,17 @@
-body {
-    background-color: #f8f9fa;
-    padding: 20px;
+#body {
+    padding: 10px;
+    padding-top: .1px;
+    padding-bottom: .1px;
+    background-color: #167197
 }
 
+/* #expenseList {
+    display: flex;
+    flex-direction: column-reverse;
+} */
+
 .container {
-    background-color: #fff;
+    background-color: #69c1d7;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -12,6 +19,7 @@ body {
 
 form {
     margin-bottom: 20px;
+    background-color: rgb(60, 160, 206);
 }
 
 label {
@@ -68,4 +76,10 @@ li {
 .btn btn-primary{
     align-items: center;
     margin-left: 300px;
+}
+
+h3.display-4.text-center.mb-4{
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: .5;
 }

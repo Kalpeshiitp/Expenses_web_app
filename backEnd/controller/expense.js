@@ -4,6 +4,7 @@ const User = require("../models/user");
 const sequelize = require("../util/database");
 const AWS = require("aws-sdk");
 require("dotenv").config();
+const S3Service = require('../services/s3serivce')
 
 function uploadToS3(data, filename) {
   const BUCKET_NAME = process.env.BUCKET_NAME;
@@ -40,7 +41,7 @@ const downloadExpenses = async (req, res) => {
     const stringifiedExpenses = JSON.stringify(expenses);
     const userId = req.user.id;
     const filename = `Expense${userId}/${new Date()}.txt`;
-    const fileURL = await uploadToS3(stringifiedExpenses, filename);
+    const fileURL = await S3Service.uploadToS3(stringifiedExpenses, filename);
     console.log(fileURL);
     res.status(200).json({ fileURL, success: true });
   } catch (err) {
@@ -48,6 +49,7 @@ const downloadExpenses = async (req, res) => {
     res.status(500).json({ success: false, message: err });
   }
 };
+
 const postExpense = async (req, res) => {
   const t = await sequelize.transaction();
   try {
@@ -57,7 +59,6 @@ const postExpense = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Parameter missing" });
     }
-
     const data = await Expense.create(
       {
         money: money,
@@ -83,6 +84,7 @@ const postExpense = async (req, res) => {
     );
 
     await t.commit();
+    console.log('data>>>',data)
     res.status(201).json({ newExpenseDetail: data });
   } catch (err) {
     await t.rollback();
@@ -92,7 +94,6 @@ const postExpense = async (req, res) => {
     });
   }
 };
-
 
 const getExpense = async (req, res) => {
   try {
@@ -126,20 +127,6 @@ const getExpense = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-
-
-// const getExpense = async (req, res) => {
-//   try {
-//     const expenses = await Expense.findAll({ where: { userId: req.user.id } });
-//     const user = await User.findOne({ where: { id: req.user.id } });
-//     const expenseSum = user.totalExpense;
-//     res.status(200).json({ allExpense: { expenses, expenseSum } });
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({ error: err.message });
-//   }
-// };
 
 const deleteExpense = async (req, res) => {
   const t = await sequelize.transaction();
