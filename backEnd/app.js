@@ -1,4 +1,6 @@
 const express = require("express");
+
+const fs = require('fs')
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 const cors = require("cors");
@@ -8,6 +10,9 @@ const jsonParser = bodyParser.json();
 const app = express();
 app.use(cors());
 const dotenv = require("dotenv");
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan')
 
 const User = require("./models/user");
 const Forgotpassword = require("./models/forgotpassword");
@@ -19,6 +24,11 @@ const expenseRouter = require("./routes/expense");
 const purchaseRouter = require("./routes/purchase");
 const premiumRouter = require("./routes/premiumFeature");
 const resetPasswordRoutes = require("./routes/resetPassword");
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'), {flags:'a'})
+
+app.use(helmet())
+app.use(compression())
+app.use(morgan('combined',{stream:accessLogStream}));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
