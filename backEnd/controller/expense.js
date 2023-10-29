@@ -105,13 +105,13 @@ const getExpense = async (req, res) => {
     const total = await Expense.count({ where: { userId: req.user.id } });
     const expenses = await Expense.findAll({
       where: { userId: req.user.id },
+      order: [['createdAt', 'DESC']],
       offset,
       limit: itemsPerPage,
     });
-
     const user = await User.findOne({ where: { id: req.user.id } });
     const expenseSum = user.totalExpense;
-
+    
     res.status(200).json({
       expenses,
       expenseSum,

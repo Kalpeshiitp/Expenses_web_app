@@ -16,17 +16,11 @@ const getLeaderBoard = async (req, res) => {
       offset,
       limit,
     });
-
-
-    // const leaderboardofuser =await User.findAll({
-    //     order:[['totalExpense', 'DESC']]
-    // })
 console.log('leaderboardofuser>>>>>', leaderboardofuser)
-console.log('total>>>',total)
     res.status(200).json({
       leaderboardofuser,
       currentPage: page,
-      hasNextPage: offset + itemsPerPage < total,
+      hasNextPage: offset + itemsPerPage < leaderboardofuser.count,
       nextPage: page + 1,
       hasPreviousPage: page > 1,
       previousPage: page - 1,

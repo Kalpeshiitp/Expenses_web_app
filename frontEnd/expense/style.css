@@ -83,3 +83,30 @@ h3.display-4.text-center.mb-4{
     font-weight: 300;
     line-height: .5;
 }
+
+.delete-button {
+    background-color: transparent;
+    color: black;
+    border: 2px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .delete-button:hover {
+    background-color: red;
+    color: white;
+  }
+  .pagination-button {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .pagination-button:hover {
+    background-color: rgb(41, 71, 205);
+    color: white;
+  }

@@ -37,7 +37,6 @@ body {
   }
   
   button {
-    /* width: 100%; */
     background-color: #0074d9;
     color: #fff;
     padding: 10px;
@@ -118,28 +117,52 @@ body {
     margin: 20px 0;
   }
   
-  /* Apply styles to table headers */
+
   th {
     background-color: #007BFF;
     color: white;
     padding: 10px;
     text-align: left;
   }
-  
-  /* Apply styles to table cells */
+
   td {
     padding: 10px;
     border: 1px solid #ddd;
   }
   
-  /* Allow text to wrap within the description cell */
+
   td.description {
     white-space: normal;
   }
   
-  /* Apply styles to the total expense row */
+
   tr:last-child {
     background-color: #007BFF;
     color: white;
     font-weight: bold;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center; /* Center-align text */
+  }
+  
+  /* Center-align the select element */
+  #itemsPerPage {
+    width: 100px; /* Adjust the width as needed */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin: 0 auto; /* Center-align the select element */
+    display: block; /* Center-align the select element */
+  }
+  
+  /* Center-align the pagination list */
+  #pagination {
+    text-align: center; /* Center-align text within the list */
+    list-style: none;
+    padding: 0;
   }

@@ -6,13 +6,18 @@ const generateAccessToken = (id, name, ispremiumuser) => {
   return jwt.sign({ userId: id, name: name, ispremiumuser }, 'secretKey');
 };
 
-
 const postUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const isValid = (value) => value !== null && value !== undefined && value !== '';
     if (!isValid(name) || !isValid(password) || !isValid(email)) {
       return res.status(400).json({ error: "Bad parameters. Something is missing." });
+    }
+
+    // Check if a user with the same email already exists
+    const existingUser = await User.findOne({ where: { email: email } });
+    if (existingUser) {
+      return res.status(409).json({ error: "Email is already in use." });
     }
 
     bcrypt.hash(password, 10, async (err, hash) => {
@@ -27,6 +32,27 @@ const postUser = async (req, res, next) => {
     res.status(500).json({ error: "Error posting the data to the database: " + err });
   }
 };
+
+// const postUser = async (req, res, next) => {
+//   try {
+//     const { name, email, password } = req.body;
+//     const isValid = (value) => value !== null && value !== undefined && value !== '';
+//     if (!isValid(name) || !isValid(password) || !isValid(email)) {
+//       return res.status(400).json({ error: "Bad parameters. Something is missing." });
+//     }
+
+//     bcrypt.hash(password, 10, async (err, hash) => {
+//       if (err) {
+//         return res.status(500).json({ error: "Error hashing the password." });
+//       }
+
+//       await User.create({ name, email, password: hash });
+//       res.status(201).json({ message: "Successfully created a new user." });
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "Error posting the data to the database: " + err });
+//   }
+// };
 
 const postLogin = async (req, res, next) => {
   try {

@@ -106,6 +106,8 @@ document.getElementById("rzp-button1").onclick = async function (e) {
         showPremiumUserMessage();
         localStorage.setItem("token", res.data.token);
         showLeaderBoard();
+        document.getElementById("downloadexpense").style.display = "block";
+        expenseTable()
       } catch (error) {
         console.error(error);
         alert("Transaction status update failed");
@@ -270,17 +272,20 @@ function showpagination({
   if (hasPreviousPage) {
     const btn2 = document.createElement("button");
     btn2.innerHTML = "previous";
+    btn2.className ="pagination-button"
     btn2.addEventListener("click", () => getExpense(previousPage));
     pagination.appendChild(btn2);
   }
   const btn1 = document.createElement("button");
   btn1.innerHTML = `${currentPage}`;
+  btn1.className ="pagination-button"
   btn1.addEventListener("click", () => getExpense(currentPage));
   pagination.appendChild(btn1);
 
   if (hasNextPage) {
     const btn3 = document.createElement("button");
     btn3.innerHTML = "Next";
+    btn3.className = "pagination-button"
     btn3.addEventListener("click", () => getExpense(nextPage));
     pagination.appendChild(btn3);
   }
@@ -288,6 +293,7 @@ function showpagination({
   if (lastPage) {
     const btn4 = document.createElement("button");
     btn4.innerHTML = "Last";
+    btn4.className = "pagination-button"
     btn4.addEventListener("click", () => getExpense(lastPage));
     pagination.appendChild(btn4);
   }

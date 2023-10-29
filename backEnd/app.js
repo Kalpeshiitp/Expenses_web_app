@@ -1,15 +1,16 @@
 const express = require("express");
-
 const fs = require('fs')
+// const https = require('https')
+
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const jsonParser = bodyParser.json();
 const app = express();
 app.use(cors());
-const dotenv = require("dotenv");
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan')
@@ -29,6 +30,8 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'), 
 app.use(helmet())
 app.use(compression())
 app.use(morgan('combined',{stream:accessLogStream}));
+// const privateKey = fs.readFileSync('server.key')
+// const certificate = fs.readFileSync('server.cert')
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -47,6 +50,7 @@ Order.belongsTo(User);
 User.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(User);
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 4000}`);
-});
+// https.createServer({key:privateKey, cert:certificate},app).listen(process.env.PORT || 4000, () => {
+//   console.log(`Server is running on port ${process.env.PORT || 4000}`);
+// });
+ app.listen(process.env.PORT || 4000)
