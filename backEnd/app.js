@@ -1,7 +1,5 @@
 const express = require("express");
 const fs = require('fs')
-// const https = require('https')
-
 const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 const cors = require("cors");
@@ -50,7 +48,13 @@ Order.belongsTo(User);
 User.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(User);
 
-// https.createServer({key:privateKey, cert:certificate},app).listen(process.env.PORT || 4000, () => {
-//   console.log(`Server is running on port ${process.env.PORT || 4000}`);
-// });
- app.listen(process.env.PORT || 4000)
+
+sequelize.sync()
+.then(()=>{
+    app.listen(process.env.PORT || 4000)
+})
+.catch((err)=>{
+    console.log(err)
+})
+
+ 
