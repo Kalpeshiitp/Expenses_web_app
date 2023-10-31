@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <title>Expense Table</title>
+  </head>
+  <body>
+  
+    <h2>Expense Table</h2>
+    <div id="expenseTableContainer"></div>
+    <label for="itemsPerPage">Items per page:</label>
+    <select id="itemsPerPage" class="form-control">
+      <option value="5">5</option>
+      <option value="10">10 </option>
+      <option value="20">20 </option>
+      <option value="30">30 </option>
+      <!-- Add more options as needed -->
+    </select>
+    <ul id="pagination"></ul>
+
+    <script src="./table.js"></script>
+  </body>
+</html>

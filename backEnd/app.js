@@ -23,14 +23,16 @@ const expenseRouter = require("./routes/expense");
 const purchaseRouter = require("./routes/purchase");
 const premiumRouter = require("./routes/premiumFeature");
 const resetPasswordRoutes = require("./routes/resetPassword");
-const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'), {flags:'a'})
-
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'access.log'), {flags:'a'})  
 // app.use(helmet())
 // app.use(compression())
 // app.use(morgan('combined',{stream:accessLogStream}));
 // const privateKey = fs.readFileSync('server.key')
 // const certificate = fs.readFileSync('server.cert')
-
+// app.use((req, res, next) => {
+//     res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
+//     next();
+//   });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(jsonParser, userRouter);
@@ -43,7 +45,6 @@ app.use((req,res)=>{
     console.log('url',req.url)
     res.sendFile(path.join(__dirname,`public/${req.url}`))
 })
-
 User.hasMany(Expense);
 Expense.belongsTo(User);
 

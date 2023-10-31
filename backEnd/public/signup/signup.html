@@ -2,15 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <title>Signup</title>
   </head>
   <body>
     <div>
-      <h2>Login</h2>
-      <form  id="loginForm" onsubmit="login(event)">
+      <h2>Signup</h2>
+      <form onsubmit="signup(event)">
+        <div>
+          <label for="name">Enter your name</label>
+          <input id="name" type="text" required />
+        </div>
         <div>
           <label for="email">Enter your email</label>
           <input id="email" type="email" required />
@@ -21,13 +25,12 @@
         </div>
 
         <div>
-          <button>Login</button>
+          <button type="submit">Signup</button>
         </div>
       </form>
-      <button id="forget" onclick="forgetPassword()">Forgot password</button>
     </div>
-    <p id="responseMessage"></p>
-    <a href="../signup/signup.html">New User -- Sign Up</a>
-    <script src="./login.js"></script>
+    <a href="../login/login.html">Existing User</a>
+
+    <script src="./signup.js"></script>
   </body>
 </html>
