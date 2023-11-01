@@ -17,7 +17,7 @@ async function signup(event) {
     };
 
     const response = await axios.post(
-      "http://51.20.109.99:4000/user/signup",
+      "   http://51.20.114.145:4000/user/signup",
       signupObj
     );
 

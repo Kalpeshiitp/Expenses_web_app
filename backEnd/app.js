@@ -47,7 +47,6 @@ app.use((req,res)=>{
 })
 User.hasMany(Expense);
 Expense.belongsTo(User);
-
 User.hasMany(Order);
 Order.belongsTo(User);
 

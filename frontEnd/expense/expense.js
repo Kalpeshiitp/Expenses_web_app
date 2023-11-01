@@ -11,7 +11,7 @@ async function expensesDetails(event) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
-      "http://51.20.109.99:4000/expense/add-expense",
+      "   http://51.20.114.145:4000/expense/add-expense",
       obj,
       {
         headers: { Authorization: token },
@@ -68,7 +68,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const page = 1;
 
   const response = await axios.get(
-    `http://51.20.109.99:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,
+    `   http://51.20.114.145:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,
     {
       headers: { Authorization: token },
     }
@@ -81,7 +81,7 @@ document.getElementById("rzp-button1").onclick = async function (e) {
   const token = localStorage.getItem("token");
 
   const response = await axios.get(
-    "http://51.20.109.99:4000/purchase/premiummembership",
+    "   http://51.20.114.145:4000/purchase/premiummembership",
     {
       headers: { Authorization: token },
     }
@@ -92,7 +92,7 @@ document.getElementById("rzp-button1").onclick = async function (e) {
     handler: async function (response) {
       try {
         const res = await axios.post(
-          "http://51.20.109.99:4000/purchase/updatetransactionstatus",
+          "   http://51.20.114.145:4000/purchase/updatetransactionstatus",
           {
             order_id: response.razorpay_order_id,
             payment_id: response.razorpay_payment_id,
@@ -141,7 +141,7 @@ async function getLeaderBoardData() {
 
   try {
     const response = await axios.get(
-      `http://51.20.109.99:4000/premium/showleaderboard?page=${currentPage}&itemsPerPage=${itemsPerPage}`,
+      `   http://51.20.114.145:4000/premium/showleaderboard?page=${currentPage}&itemsPerPage=${itemsPerPage}`,
       {
         headers: { Authorization: token },
       }
@@ -231,7 +231,7 @@ function download() {
   console.log("token for downloading the expense file", token);
 
   axios
-    .get("http://51.20.109.99:4000/user/download", {
+    .get("   http://51.20.114.145:4000/user/download", {
       headers: { Authorization: token },
     })
     .then((response) => {
@@ -303,7 +303,7 @@ async function getExpense(page) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `http://51.20.109.99:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,
+      `http://51.20.114.145:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,
       {
         headers: { Authorization: token },
       }
@@ -319,7 +319,7 @@ async function deleteExpense(expenseId) {
   const token = localStorage.getItem("token");
   try {
     await axios.delete(
-      `http://51.20.109.99:4000/expense/delete-expense/${expenseId}`,
+      `   http://51.20.114.145:4000/expense/delete-expense/${expenseId}`,
       {
         headers: { Authorization: token },
       }

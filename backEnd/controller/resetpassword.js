@@ -50,7 +50,7 @@ const forgotpassword = async (req, res) => {
       to: email,
       subject: "Password Reset",
       text: "Click the link to reset your password",
-      html: `<a href="http://localhost:4000/password/resetpassword/${id}">Reset password</a>`,
+      html: `<a href="http://localhost:4000:4000/password/resetpassword/${id}">Reset password</a>`,
     };
 
     await new Promise((resolve, reject) => {

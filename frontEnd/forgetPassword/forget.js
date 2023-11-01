@@ -6,7 +6,7 @@ async function forgotpassword(event) {
     const token = localStorage.getItem("token");
 
     const response = await axios.post(
-      "http://51.20.109.99:4000/password/forgotpassword",
+      "   http://51.20.114.145:4000/password/forgotpassword",
       userDetails,
       { headers: { Authorization: token } }
     );

@@ -7,9 +7,8 @@ async function login(event) {
         email: email,
         password: password,
       };
-
         const response = await axios.post(
-          "http://51.20.109.99:4000/user/login",
+          "http://51.20.114.145:4000/user/login",
           loginObj
         );
           if(response.status===200){

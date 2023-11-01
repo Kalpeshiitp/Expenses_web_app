@@ -2,7 +2,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const page =1;
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://51.20.109.99:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`, {
+      const response = await axios.get(`   http://51.20.114.145:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`, {
         headers: { 'Authorization': token }
       });
       console.log(response)
@@ -134,7 +134,7 @@ async function getExpenseTable(page){
   const token = localStorage.getItem('token')
   try{
     const response =  await axios
-       .get(`http://51.20.109.99:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,{
+       .get(`   http://51.20.114.145:4000/expense/get-expense?page=${page}&itemsPerPage=${itemsPerPage}`,{
        headers: { Authorization: token },
    })
    showExpenseTable(response.data.expenses, response.data.expenseSum)
