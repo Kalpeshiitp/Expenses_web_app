@@ -42,8 +42,8 @@ app.use(jsonParser, premiumRouter);
 app.use(jsonParser, resetPasswordRoutes);
 
 app.use((req,res)=>{
-    console.log('url',req.url)
     console.log("req is successfull")
+    console.log("automatic deployment")
     res.sendFile(path.join(__dirname,`public/${req.url}`))
 })
 User.hasMany(Expense);
