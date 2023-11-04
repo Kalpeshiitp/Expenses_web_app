@@ -4,35 +4,7 @@ const User = require("../models/user");
 const sequelize = require("../util/database");
 const AWS = require("aws-sdk");
 require("dotenv").config();
-const S3Service = require('../services/s3serivce')
-
-function uploadToS3(data, filename) {
-  const BUCKET_NAME = process.env.BUCKET_NAME;
-  const IM_USER_KEY = process.env.IM_USER_KEY;
-  const IM_USER_SECRET = process.env.IM_USER_SECRET;
-  let s3bucket = new AWS.S3({
-    accessKeyId: IM_USER_KEY,
-    secretAccessKey: IM_USER_SECRET,
-  });
-  const params = {
-    Bucket: BUCKET_NAME,
-    Key: filename,
-    Body: data,
-    ACL: "public-read", 
-  };
-
-  return new Promise((resolve, reject) => {
-    s3bucket.upload(params, (err, s3response) => {
-      if (err) {
-        console.log("something went wrong", err);
-        reject(err);
-      } else {
-        console.log("success", s3response);
-        resolve(s3response);
-      }
-    });
-  });
-}
+const S3Service = require("../services/s3serivce");
 
 const downloadExpenses = async (req, res) => {
   try {
@@ -84,7 +56,7 @@ const postExpense = async (req, res) => {
     );
 
     await t.commit();
-    console.log('data>>>',data)
+    console.log("data>>>", data);
     res.status(201).json({ newExpenseDetail: data });
   } catch (err) {
     await t.rollback();
@@ -98,20 +70,20 @@ const postExpense = async (req, res) => {
 const getExpense = async (req, res) => {
   try {
     const page = +req.query.page || 1;
-    const itemsPerPage = +req.query.itemsPerPage || 5; 
-    console.log("itemPerPage>>>>",itemsPerPage);
+    const itemsPerPage = +req.query.itemsPerPage || 5;
+    console.log("itemPerPage>>>>", itemsPerPage);
     const offset = (page - 1) * itemsPerPage;
 
     const total = await Expense.count({ where: { userId: req.user.id } });
     const expenses = await Expense.findAll({
       where: { userId: req.user.id },
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       offset,
       limit: itemsPerPage,
     });
     const user = await User.findOne({ where: { id: req.user.id } });
     const expenseSum = user.totalExpense;
-    
+
     res.status(200).json({
       expenses,
       expenseSum,
@@ -124,7 +96,7 @@ const getExpense = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

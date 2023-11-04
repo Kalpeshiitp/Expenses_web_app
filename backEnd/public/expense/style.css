@@ -1,29 +1,20 @@
-#body {
+body {
     padding: 10px;
-    padding-top: .1px;
-    padding-bottom: .1px;
-    background-color: #167197
+    padding-top: 0.1px;
+    padding-bottom: 0.1px;
+    background-color: #167197;
 }
-
-/* #expenseList {
-    display: flex;
-    flex-direction: column-reverse;
-} */
 
 .container {
     background-color: #69c1d7;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 form {
     margin-bottom: 20px;
     background-color: rgb(60, 160, 206);
-}
-
-label {
-    font-weight: bold;
 }
 
 ul {
@@ -40,13 +31,11 @@ li {
     justify-content: space-between;
 }
 
-
 .form-control:focus {
     border-color: #007bff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-
 
 .form-control {
     border: 1px solid #ced4da;
@@ -56,11 +45,10 @@ li {
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-
 .form-group {
     display: flex;
-    flex-direction: column; 
-    margin-bottom: 15px; 
+    flex-direction: column;
+    margin-bottom: 15px;
 }
 
 .form-group label,
@@ -70,18 +58,19 @@ li {
 }
 
 .edit-button {
-    margin-left: auto; 
+    margin-left: auto;
     cursor: pointer;
 }
-.btn btn-primary{
+
+.btn-primary {
     align-items: center;
     margin-left: 300px;
 }
 
-h3.display-4.text-center.mb-4{
+h3.display-4.text-center.mb-4 {
     font-size: 2.5rem;
     font-weight: 300;
-    line-height: .5;
+    line-height: 0.5;
 }
 
 .delete-button {
@@ -91,22 +80,23 @@ h3.display-4.text-center.mb-4{
     padding: 5px 10px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-  }
+}
 
-  .delete-button:hover {
+.delete-button:hover {
     background-color: red;
     color: white;
-  }
-  .pagination-button {
+}
+
+.pagination-button {
     background-color: white;
     color: black;
     border: 2px solid black;
     padding: 5px 10px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-  }
+}
 
-  .pagination-button:hover {
+.pagination-button:hover {
     background-color: rgb(41, 71, 205);
     color: white;
-  }
+}
